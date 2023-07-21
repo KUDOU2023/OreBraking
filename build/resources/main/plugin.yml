@@ -1,0 +1,6 @@
+name: OreBraking
+version: '1.0-SNAPSHOT'
+main: plugin.orebraking.OreBraking
+api-version: 1.19
+commands:
+  spawn:
