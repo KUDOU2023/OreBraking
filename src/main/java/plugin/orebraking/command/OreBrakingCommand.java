@@ -134,7 +134,6 @@ public class OreBrakingCommand extends BaseCommand implements Listener {
                 return coordinateList;
         }
 
-
         /**
          * プレイヤーが死亡した際にドロップを無くす
          * @param e プレイヤー死亡時イベント
@@ -143,9 +142,6 @@ public class OreBrakingCommand extends BaseCommand implements Listener {
         public void onPlayerDeathEvent(PlayerDeathEvent e) {
                 e.getDrops().clear();
         }
-
-
-
 
         /**
          *スコアの加点とブロック破壊時にドロップを無くす
@@ -157,13 +153,18 @@ public class OreBrakingCommand extends BaseCommand implements Listener {
                 Block oreblock = e.getBlock();
                 Player player = e.getPlayer();
 
+                if(floorOreBlockList.stream()
+                        .noneMatch(block -> block.equals(oreblock))){
+                        return;
+                }
+
                 if (floorOreBlockList.stream()
                         .anyMatch(block -> block.equals(oreblock))) {
                         e.setDropItems(false);
                 }
 
                 if (oreblock.getType().equals(Material.REDSTONE_ORE)) {
-                        player.getWorld().createExplosion(oreblock.getLocation(), 100.0f);
+                        player.getWorld().createExplosion(oreblock.getLocation(), 50.0f);
                         player.damage(20);
                         player.sendMessage(ChatColor.RED + "エクスプローーージョン！");
                 }
@@ -189,8 +190,6 @@ public class OreBrakingCommand extends BaseCommand implements Listener {
         /**
          * 鉱石の出現エリアを取得します。
          * 出現エリアはセンターブロックを中心に
-         * X軸とＺ軸を
-         * プレイヤーの頭上に起点ブロックを取得　
          * オフセットでコマンド引数分のブロックを取得し、鉱石にブロックを変換
          *
          * @param player　コマンドを実行したプレイヤー
@@ -319,8 +318,8 @@ public class OreBrakingCommand extends BaseCommand implements Listener {
                 inventory.setItemInMainHand(netheritePickaxe);
         }
 
-        private void gamePlay(Player player, ExecutingPlayer nowExecutingPlayer){
-                Bukkit.getScheduler().runTaskTimer(oreBraking,Runnable -> {
+        private void gamePlay(Player player, ExecutingPlayer nowExecutingPlayer) {
+                Bukkit.getScheduler().runTaskTimer(oreBraking, Runnable -> {
                         if (nowExecutingPlayer.getGameTime() <= 0 || player.getHealth() <= 0) {
                                 Runnable.cancel();
 
@@ -328,11 +327,12 @@ public class OreBrakingCommand extends BaseCommand implements Listener {
                                         nowExecutingPlayer.getPlayerName() + " " + "合計" + nowExecutingPlayer.getScore() + "点！",
                                         0, 60, 20);
 
-                                endGame(player,nowExecutingPlayer);
+                                endOreBrakingGame(player,nowExecutingPlayer);
                                 return;
                         }
+
                         nowExecutingPlayer.setGameTime(nowExecutingPlayer.getGameTime() - 5);
-                },0,5*20);
+                }, 0, 5 * 20);
         }
 
         /**
@@ -340,7 +340,7 @@ public class OreBrakingCommand extends BaseCommand implements Listener {
          * @param player プレイヤー
          * @param nowExecutingPlayer　実行しているプレイヤー
          */
-        private void endGame(Player player, ExecutingPlayer nowExecutingPlayer){
+        private void endOreBrakingGame(Player player, ExecutingPlayer nowExecutingPlayer){
                 player.sendTitle("ゲームが終了しました。",
                         nowExecutingPlayer.getPlayerName() + " " + "合計" + nowExecutingPlayer.getScore() + "点！",
                         0, 60, 20);

@@ -10,7 +10,7 @@ public final class OreBraking extends JavaPlugin {
     public void onEnable() {
         OreBrakingCommand oreBrakingCommand = new OreBrakingCommand(this);
         Bukkit.getPluginManager().registerEvents(oreBrakingCommand,this);
-        getCommand("spawn").setExecutor(oreBrakingCommand);
+        getCommand("gameStart").setExecutor(oreBrakingCommand);
 
     }
 }
