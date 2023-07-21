@@ -226,7 +226,6 @@ public class OreBrakingCommand extends BaseCommand implements Listener {
                 shuffleChangeDiamondAndEmeraldOreBlocks(floorOreBlockList);
 
                 player.teleport(centerLocation.add(0, 1, 0));
-                player.sendMessage("Number of blocks created: " + floorOreBlockList.size());
         }
 
         /**
